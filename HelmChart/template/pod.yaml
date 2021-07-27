@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: {{ .values.nfs.kind }}
+metadata:
+  name: {{ .values.nfs.name }}
+  labels:
+    app: {{ .values.nfs.labels }}
+spec:
+  containers:
+    - name: {{ .values.nfs.containers.name }}
+      image: {{ .values.nfs.containers.image }}
+      resources:
+        requests:
+          memory: "{{ .values.nfs.containers.requests.memory }}"
+          cpu: "{{ .values.nfs.containers.requests.cpu }}"
+        limits:
+          memory: "{{ .values.nfs.containers.limits.memory }}"
+          cpu: "{{ .values.nfs.containers.limits.cpu }}"
+      ports:
+        - containerPort: {{ .values.nfs.containers.port }}
+      volumeMounts:
+        - mountPath: {{ .values.nfs.volume.mountpath }}
+          name: {{ .values.nfs.volume.name }}
+  volumes:
+    - name: {{ .values.nfs.volume.name }}
+      persistentVolumeClaim:
+        claimName: {{ .values.nfs.volume.claimname }}

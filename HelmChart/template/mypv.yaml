@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: {{ .values.nfs.volume.mypv.pv.kind }}
+metadata:
+  name: {{ .values.nfs.volume.mypv.pv.name }}
+  labels:
+    type: {{ .values.nfs.volume.mypv.pv.labels }}
+spec:
+  storageClassName: {{ .values.nfs.volume.mypv.pv.storageclassname }}
+  capacity:
+    storage: {{ .values.nfs.volume.mypv.pv.storage }}
+  accessModes:
+    - {{ .values.nfs.volume.mypv.pv.accessmode }}
+  hostPath:
+    path: "{{ .values.nfs.volume.mypv.pv.path }}"
+---
+apiVersion: v1
+kind: {{ .values.nfs.volume.mypv.pvc.kind }}
+metadata:
+  name: {{ .values.nfs.volume.mypv.pvc.name }}
+spec:
+  storageClassName: {{ .values.nfs.volume.mypv.pvc.storageclassname }}
+  accessModes:
+    - {{ .values.nfs.volume.mypv.pvc.accessmode }}
+  resources:
+    requests:
+      storage: {{ .values.nfs.volume.mypv.pvc.storage }}

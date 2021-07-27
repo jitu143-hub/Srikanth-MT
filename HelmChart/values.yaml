@@ -1,0 +1,48 @@
+nfs:
+  kind: Pod
+  name: task-pv-pod
+  labels: task-pv
+  containers:
+      name: task-pv-container
+      image: nginx
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+      port: 80
+  volume:
+    name: myvolume
+    mountPath: /usr/share/nginx/html/
+    claimname: mypvc
+    pvc:
+      kind: PersistentVolumeClaim
+      name: mypvc
+      accessmode: ReadWriteOnce
+      storage: 4050Mi
+    pv:
+      kind: PersistentVolume
+      name: mypv
+      storage: 5Gi
+      volumemode: Filesystem
+      accessmode: ReadWriteOnce
+      path: /mnt/nfs_share/
+      server: 167.71.228.6
+    mypv:
+      pv:
+        kind: PersistentVolume
+        name: mypv
+        labels: local
+        storageclass: manual
+        storage: 1Gi
+        accessmode: ReadWriteOnce
+        path: /run/desktop/mnt/host/c/tempdir
+      pvc:
+        kind: PersistentVolumeClaim
+        name: mypvc
+        accessmode: ReadWriteOnce
+        storageclass: manual
+        storage: 1Gi        
+
+  

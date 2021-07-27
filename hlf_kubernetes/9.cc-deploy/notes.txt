@@ -1,0 +1,35 @@
+=========================================Deploying chaincode =========================================
+
+go to hlf-kubernetes/9.cc-deploy/basic folder and run the below command
+kubectl apply -f .
+====================================================================================================================================================================
+========================================= Lifecyle Step: Approve for Organisation =========================================
+ORG 1 
+Login to peer cli
+peer lifecycle chaincode approveformyorg --channelID mychannel --name basic --version 1.0 --init-required --package-id basic:ad75071b03149885c43fee18e653f73e2d2111b59027a61d36944738c88a186c --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA
+verify approval using below command on cli container
+peer lifecycle chaincode queryapproved --channelID mychannel --name basic
+
+ORG 2 
+Login to peer cli
+peer lifecycle chaincode approveformyorg --channelID mychannel --name basic --version 1.0 --init-required --package-id basic:19cfdc543fa10d683e3e8df5533bc1091dc05d5210c4697923a099d3275b1cce --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA
+verify approval using below command on cli container
+peer lifecycle chaincode queryapproved --channelID mychannel --name basic
+
+
+ORG 3 
+Login to peer cli
+peer lifecycle chaincode approveformyorg --channelID mychannel --name basic --version 1.0 --init-required --package-id basic:31e8a859c996bb6bdd4f27a08e327b5584fa4bdd17d9e19ad46a5a1575efeab6 --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA
+verify approval using below command on cli container
+peer lifecycle chaincode queryapproved --channelID mychannel --name basic
+=============================================================================================================================================================================================================
+
+========================================= Lifecyle Step: Commit for Organisations =========================================
+
+Login to peer cli of any org and run the below command 
+peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name basic --version 1.0 --init-required --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA
+peer lifecycle chaincode commit -o orderer:7050 --channelID mychannel --name basic --version 1.0 --sequence 1 --init-required --tls --cafile $ORDERER_CA --peerAddresses peer0-org1:7051 --tlsRootCertFiles /organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0-org2:7051 --tlsRootCertFiles /organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt --peerAddresses peer0-org3:7051 --tlsRootCertFiles /organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt
+
+
+=========================================  Initialize for Organisations =========================================
+peer chaincode invoke -o orderer:7050 --isInit --tls true --cafile $ORDERER_CA -C mychannel -n basic --peerAddresses peer0-org1:7051 --tlsRootCertFiles /organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0-org2:7051 --tlsRootCertFiles /organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt --peerAddresses peer0-org3:7051 --tlsRootCertFiles /organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt -c '{"Args":["InitLedger"]}' --waitForEvent

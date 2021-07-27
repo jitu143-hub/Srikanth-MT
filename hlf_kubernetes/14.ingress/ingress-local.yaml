@@ -1,0 +1,55 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    #nginx.ingress.kubernetes.io/rewrite-target: /$2
+    #cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+spec:
+  rules:
+    - host: explorer.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: explorer
+                port:
+                  number: 8080
+#          - path: /
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: explorer
+#                port:
+#                  number: 8080
+    - host: api.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 4000
+    - host: ui.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80                                   
+#          - path: /grafana
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: grafana
+#                port:
+#                  number: 3000        

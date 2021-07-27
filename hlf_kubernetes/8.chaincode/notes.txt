@@ -1,0 +1,48 @@
+Packaging chaincode
+go to share/chaincode/basic/packaging i.e mounted volume
+
+ORG 1
+1. Update the connection.json with chaincode address 
+example basic-org1:7052
+2. tar cfz code.tar.gz connection.json
+3. tar cfz basic-org1.tar.gz code.tar.gz metadata.json
+
+ORG 2 
+rm -rf code.tar.gz 
+1. Update the connection.json with chaincode address 
+example basic-org2:7052
+2. tar cfz code.tar.gz connection.json
+3. tar cfz basic-org2.tar.gz code.tar.gz metadata.json
+
+ORG 3
+rm -rf code.tar.gz 
+1. Update the connection.json with chaincode address 
+example basic-org3:7052
+2. tar cfz code.tar.gz connection.json
+3. tar cfz basic-org3.tar.gz code.tar.gz metadata.json
+
+===================================================================================================================
+Installing chaincode
+
+We need to go to the peer cli pods to run the below commands
+
+ORG 1 Peer CLI
+go to : /opt/gopath/src/github.com/chaincode/basic/packaging
+peer lifecycle chaincode install basic-org1.tar.gz
+After running the above command succefully note the package identifier 
+example : basic:ad75071b03149885c43fee18e653f73e2d2111b59027a61d36944738c88a186c
+
+
+ORG 2 Peer CLI
+go to : /opt/gopath/src/github.com/chaincode/basic/packaging
+peer lifecycle chaincode install basic-org2.tar.gz
+After running the above command succefully note the package identifier 
+example : basic:19cfdc543fa10d683e3e8df5533bc1091dc05d5210c4697923a099d3275b1cce
+
+ORG 3 Peer CLI
+go to : /opt/gopath/src/github.com/chaincode/basic/packaging
+peer lifecycle chaincode install basic-org3.tar.gz
+After running the above command succefully note the package identifier 
+example : basic:31e8a859c996bb6bdd4f27a08e327b5584fa4bdd17d9e19ad46a5a1575efeab6
+
+===================================================================================================================
